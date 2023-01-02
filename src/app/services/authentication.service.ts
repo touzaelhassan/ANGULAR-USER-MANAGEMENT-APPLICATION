@@ -9,7 +9,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 @Injectable({ providedIn: 'root'})
 export class AuthenticationService {
 
-    private host = environment.APIEnpointsURL;
+    public host = environment.APIEnpointsURL;
     private token: any;
     private loggedInUsername: any;
     private jwtHelper = new JwtHelperService();
@@ -22,6 +22,7 @@ export class AuthenticationService {
 
     public login(user: User) :Observable<HttpResponse<any> | HttpErrorResponse> {
         return this.http.post<HttpResponse<any> | HttpErrorResponse>(`${this.host}/user/login`, user, {observe:'response'});
+        
     }
 
     public logout() : void {
