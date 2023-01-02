@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserService } from './user.service';
-import { User } from '../models/User';
+import { User } from '../models/user';
 import { Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
@@ -33,7 +33,7 @@ export class AuthenticationService {
         localStorage.removeItem('users');
     }
 
-    public isUserLoggedIn() : boolean {
+    public isUserLoggedIn() : any {
 
         this.loadToken();
 
