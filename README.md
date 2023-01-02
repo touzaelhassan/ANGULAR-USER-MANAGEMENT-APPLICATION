@@ -1,4 +1,6 @@
-# FRONTENDANGULARUSERMANAGEMENTAPPLICATION
+### FRONTEND ANGULAR USER MANAGEMENT APPLICATION
+
+![Angular-State-Management-with-NgRx](https://user-images.githubusercontent.com/59705964/210194266-2553743b-67b6-416a-a6f7-131e5cea7769.png)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.4.
 
