@@ -44,9 +44,9 @@ export class UserService {
 
     public getUsersFromLocalStorage(): User[] {
         if (localStorage.getItem('users')) {
-            return JSON.parse(localStorage.getItem('users'));
+            return JSON.parse(localStorage.getItem('users') || '');
         }
-        return null;
+        return [];
     }
 
     public createUserFormDate(loggedInUsername: string, user: User, profileImage: File): FormData {
