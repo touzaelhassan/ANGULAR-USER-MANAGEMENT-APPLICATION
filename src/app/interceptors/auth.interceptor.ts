@@ -20,5 +20,4 @@ export class AuthInterceptor implements HttpInterceptor {
         return httpHandler.handle(request);
 
     }
-
 }

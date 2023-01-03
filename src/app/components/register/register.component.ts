@@ -15,20 +15,12 @@ import { NotificationService } from 'src/app/services/notification.service';
 
 export class RegisterComponent implements OnInit, OnDestroy{
 
-   public showLoading: boolean = false;
+    public showLoading: boolean = false;
     private subscriptions: Subscription[] = [];
 
     constructor(private router : Router, private authenticationService : AuthenticationService, private notifier: NotificationService){}
 
-    ngOnInit(): void { 
-
-        if(this.authenticationService.isUserLoggedIn()){
-
-            this.router.navigateByUrl('/user/management'); 
-
-        }
-
-    }
+    public ngOnInit(): void { if(this.authenticationService.isUserLoggedIn()){ this.router.navigateByUrl('/user/management'); } }
 
     public onRegister(user: User): void{
 
@@ -47,8 +39,8 @@ export class RegisterComponent implements OnInit, OnDestroy{
               }
             )
         );
-
     }
+
   private sendNotification(notificationType: NotificationType, message: string) : void {
     if(message){
       this.notifier.notify(notificationType, message);
@@ -57,8 +49,6 @@ export class RegisterComponent implements OnInit, OnDestroy{
     }
   }
 
-    ngOnDestroy(): void { 
-        this.subscriptions.forEach(sub => sub.unsubscribe());
-    }
+  public ngOnDestroy(): void { this.subscriptions.forEach(sub => sub.unsubscribe()); }
 
 }

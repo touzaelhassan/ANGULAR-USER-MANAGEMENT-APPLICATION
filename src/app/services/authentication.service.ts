@@ -16,14 +16,9 @@ export class AuthenticationService {
 
     constructor(private http: HttpClient) { }
 
-    public register(user: User) :Observable<User> {
-        return this.http.post<User>(`${this.host}/api/register`, user);
-    }
+    public register(user: User) :Observable<User> { return this.http.post<User>(`${this.host}/api/register`, user); }
 
-    public login(user: User) :Observable<HttpResponse<User>> {
-        return this.http.post<User>(`${this.host}/api/login`, user, { observe:'response' });
-        
-    }
+    public login(user: User) :Observable<HttpResponse<User>> { return this.http.post<User>(`${this.host}/api/login`, user, { observe:'response' }); }
 
     public logout() : void {
         this.token = null;

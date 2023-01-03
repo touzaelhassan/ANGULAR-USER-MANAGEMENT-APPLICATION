@@ -23,8 +23,8 @@ export class UserService {
         return this.http.get(`${this.host}/user/reset-password/${email}`);
     }
 
-    public getUsers(): Observable<User[] | HttpErrorResponse>{ 
-        return this.http.get<User[]>(`${this.host}/user/list`); 
+    public getUsers(): Observable<User[]>{ 
+        return this.http.get<User[]>(`${this.host}/api/users`); 
     }
 
     public updateProfileImage(formData: FormData): Observable<HttpEvent<User> | HttpErrorResponse>{

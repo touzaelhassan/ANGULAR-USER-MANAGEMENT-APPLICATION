@@ -22,15 +22,11 @@ export class LoginComponent implements OnInit, OnDestroy{
     constructor(private router : Router, private authenticationService : AuthenticationService, private notifier: NotificationService){}
 
     ngOnInit(): void { 
-
+      
         if(this.authenticationService.isUserLoggedIn()){
-
             this.router.navigateByUrl('/user/management'); 
-
         }else{
-
             this.router.navigateByUrl('/login');
-
         }
 
     }
@@ -57,6 +53,7 @@ export class LoginComponent implements OnInit, OnDestroy{
         );
 
     }
+
   private sendErrorNotification(notificationType: NotificationType, message: string) : void {
     if(message){
       this.notifier.notify(notificationType, message);
@@ -65,8 +62,6 @@ export class LoginComponent implements OnInit, OnDestroy{
     }
   }
 
-    ngOnDestroy(): void { 
-        this.subscriptions.forEach(sub => sub.unsubscribe());
-    }
+  public ngOnDestroy(): void { this.subscriptions.forEach(sub => sub.unsubscribe()); }
 
 }
