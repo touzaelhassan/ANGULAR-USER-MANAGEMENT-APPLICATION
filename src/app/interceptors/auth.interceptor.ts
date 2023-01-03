@@ -10,7 +10,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     public intercept(httpRequest: HttpRequest<any>, httpHandler: HttpHandler): Observable<HttpEvent<any>> {
 
-        if(httpRequest.url.includes(`${this.authenticationService.host}/user/login`)){
+        if(httpRequest.url.includes(`${this.authenticationService.host}/api/login`)){
           return httpHandler.handle(httpRequest);
         }
         

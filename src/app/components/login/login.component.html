@@ -11,14 +11,32 @@
       <div class="login">
         <div class="login__content">
           <h3 class="mb-3 text-center">LOGIN</h3>
-          <form class="login__form" action="" method="">
+          <form
+            class="login__form"
+            #loginForm="ngForm"
+            (ngSubmit)="onLogin(loginForm.value)"
+          >
             <div class="mb-3">
               <label for="" class="form-label">Username</label>
-              <input type="text" class="form-control" name="username" />
+              <input
+                type="text"
+                class="form-control"
+                name="username"
+                ngModel
+                #usernameInput="ngModel"
+                required
+              />
             </div>
             <div class="mb-3">
               <label for="" class="form-label">Password</label>
-              <input type="password" class="form-control" name="password" />
+
+              <input
+                type="password"
+                class="form-control"
+                name="password"
+                ngModel
+                #passwordInput="ngModel"
+              />
             </div>
             <button type="submit" class="w-100 btn btn-primary">Submit</button>
           </form>
