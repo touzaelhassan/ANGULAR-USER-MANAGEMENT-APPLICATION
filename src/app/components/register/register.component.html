@@ -7,6 +7,63 @@
     <title>ANGULAR APPLICATION | REGISTER</title>
   </head>
   <body>
-    <h3>REGISTER PAGE</h3>
+    <div class="container">
+      <div class="login">
+        <div class="login__content">
+          <h3 class="mb-3 text-center">REGISTER</h3>
+          <form
+            class="login__form"
+            #registerForm="ngForm"
+            (ngSubmit)="onRegister(registerForm.value)"
+          >
+            <div class="mb-3">
+              <label for="" class="form-label">Firstname</label>
+              <input
+                type="text"
+                class="form-control"
+                name="firstname"
+                ngModel
+                #firstnameInput="ngModel"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="" class="form-label">Lastname</label>
+
+              <input
+                type="text"
+                class="form-control"
+                name="lastname"
+                ngModel
+                #lastnameInput="ngModel"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="" class="form-label">Username</label>
+
+              <input
+                type="text"
+                class="form-control"
+                name="username"
+                ngModel
+                #usernameInput="ngModel"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="" class="form-label">Email</label>
+              <input
+                type="text"
+                class="form-control"
+                name="email"
+                ngModel
+                #emailInput="ngModel"
+              />
+            </div>
+            <button type="submit" class="w-100 btn btn-primary">Submit</button>
+          </form>
+          <a class="d-block mt-4 text-center" routerLink="/login">LOGIN</a>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
