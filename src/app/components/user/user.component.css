@@ -6,3 +6,9 @@ a {
   margin: 70px 0;
   border: 3px solid #eee;
 }
+
+.reset-password-component {
+  border: 3px solid #eee;
+  padding: 30px;
+  background-color: #f8f9fa;
+}

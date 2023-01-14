@@ -28,17 +28,18 @@ export class UserComponent implements OnInit{
     public selectedUser?: any;
     public editedUser = new User();
     private currentUsername?: string;
+    public loggedInUser: User = new User;
 
     constructor(
       private authenticationService: AuthenticationService, 
-      private userService: UserService, 
-      private router : Router, 
+      private userService: UserService,
+      private router: Router,
       private notificationService: NotificationService
       ) {}
 
     ngOnInit(): void { 
-
-        this.loggedInUserName = this.authenticationService.getUserFromLocalStorage().firstname;
+        this.loggedInUser = this.authenticationService.getUserFromLocalStorage()
+        this.loggedInUserName = this.loggedInUser.firstname;
         this.getUsers(true); 
       
     }
@@ -125,7 +126,7 @@ export class UserComponent implements OnInit{
           (response: CustomHttpRespone) => {
             this.sendNotification(NotificationType.SUCCESS, response.message);
           },
-           (httpErrorResponse: HttpErrorResponse) => {
+          (httpErrorResponse: HttpErrorResponse) => {
             this.sendNotification(NotificationType.WARNING, httpErrorResponse.error.message);
           },
           () => { emailForm.reset(); }
@@ -134,9 +135,7 @@ export class UserComponent implements OnInit{
     }
 
     public searchInUsersList(keyword: string){
-
       const searchResults: User[] = [];
-
       for (const user of this.userService.getUsersFromLocalStorage()){
         if(
           user.firstname.toLocaleLowerCase().indexOf(keyword.toLocaleLowerCase()) !== -1 || 
@@ -146,10 +145,8 @@ export class UserComponent implements OnInit{
           searchResults.push(user);
         }
       }
-
-      this.users = searchResults
+      this.users = searchResults;
       if (searchResults.length == 0 || !keyword) { this.users = this.userService.getUsersFromLocalStorage(); }
-
     }
 
     public onDelete(id: any){
@@ -159,11 +156,37 @@ export class UserComponent implements OnInit{
             this.sendNotification(NotificationType.SUCCESS, response.message);
             this.getUsers(false);
           },
-           (httpErrorResponse: HttpErrorResponse) => {
+          (httpErrorResponse: HttpErrorResponse) => {
             this.sendNotification(NotificationType.ERROR, httpErrorResponse.error.message);
           }
         )
       )
+    }
+
+    public onUpdateCurrentUser(user: User): void{
+      this.currentUsername = this.authenticationService.getUserFromLocalStorage().username;
+      const formData = this.userService.createUserFormDate(this.currentUsername, user , this.profileImage);
+      this.subscriptions.push(
+        this.userService.updateUser(formData).subscribe(
+          (response: any) =>{
+            this.authenticationService.saveUserInLocalStorage(response);
+            this.sendNotification(NotificationType.SUCCESS, `The user information were updated successfully !!.`);
+            this.getUsers(false);
+            this.profileImage = null;
+            this.filename = null;
+          },  
+          (httpErrorResponse: HttpErrorResponse) => {
+            this.sendNotification(NotificationType.ERROR, httpErrorResponse.error.message);
+            this.profileImage = null;
+          }
+        )
+      )
+    }
+
+    public onLogOut(){ 
+      this.authenticationService.logout();
+      this.router.navigateByUrl('/login');
+      this.sendNotification(NotificationType.SUCCESS, "You've been successfully logged out !!.");
     }
 
     public changeTitle(title: string): void{ this.titleSubject.next(title); }

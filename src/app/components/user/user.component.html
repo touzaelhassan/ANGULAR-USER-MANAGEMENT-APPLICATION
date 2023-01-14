@@ -153,14 +153,295 @@
         </div>
         <!-- End Users Table List -->
 
+        <!-- Start User Profile -->
+        <div class="tab-pane fade" id="profile">
+          <div class="container">
+            <div class="row flex-lg-nowrap">
+              <div class="col">
+                <div class="row">
+                  <div class="col mb-3">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="e-profile">
+                          <div class="row">
+                            <div class="col-12 col-sm-auto">
+                              <div class="mx-auto" style="width: 120px">
+                                <div
+                                  class="d-flex justify-content-center align-items-center rounded"
+                                >
+                                  <img
+                                    class="rounded"
+                                    height="135"
+                                    width="135"
+                                    src="{{ loggedInUser.profileImageUrl }}"
+                                    alt=""
+                                  />
+                                </div>
+                                <!-- <div
+                                  *ngIf="fileStatus?.status === 'progress'"
+                                  class="progress mt-1"
+                                >
+                                  <div
+                                    class="progress-bar bg-info"
+                                    role="progressbar"
+                                    [style.width.%]="fileStatus?.percentage"
+                                    aria-valuenow="0"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                  >
+                                    {{ fileStatus?.percentage }}%
+                                  </div>
+                                </div> -->
+                              </div>
+                            </div>
+                            <div
+                              class="col d-flex flex-column flex-sm-row justify-content-between mb-3"
+                            >
+                              <div
+                                class="text-center text-sm-left mb-2 mb-sm-0"
+                              >
+                                <h4
+                                  class="pt-sm-2 pb-1 mb-0 text-nowrap text-uppercase"
+                                >
+                                  {{ loggedInUser.firstname }}
+                                  {{ loggedInUser.lastname }}
+                                </h4>
+                                <p class="mb-0">{{ loggedInUser.username }}</p>
+                                <div
+                                  *ngIf="
+                                    loggedInUser.lastLoginDateDisplay !== null
+                                  "
+                                  class="text-muted"
+                                >
+                                  <small
+                                    >Last login:
+                                    {{
+                                      loggedInUser.lastLoginDateDisplay
+                                        | date : "medium"
+                                    }}</small
+                                  >
+                                </div>
+                                <div class="mt-2">
+                                  <button class="btn btn-primary" type="button">
+                                    <i class="fa fa-fw fa-camera"></i>
+                                    <span>Change Photo</span>
+                                  </button>
+                                </div>
+                              </div>
+                              <div class="text-center text-sm-right">
+                                <div class="text-muted">
+                                  <small
+                                    >Joined
+                                    {{
+                                      loggedInUser.joinDate
+                                        | date : "mediumDate"
+                                    }}</small
+                                  >
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="tab-content pt-3">
+                            <div class="tab-pane active">
+                              <form
+                                #profileUserForm="ngForm"
+                                (ngSubmit)="
+                                  onUpdateCurrentUser(profileUserForm.value)
+                                "
+                                class="form"
+                                novalidate
+                              >
+                                <div class="row">
+                                  <div class="col">
+                                    <div class="row">
+                                      <div class="col">
+                                        <div class="form-group">
+                                          <label>First Name</label>
+                                          <input
+                                            type="text"
+                                            name="firstname"
+                                            required
+                                            [(ngModel)]="loggedInUser.firstname"
+                                            class="form-control"
+                                          />
+                                        </div>
+                                      </div>
+                                      <div class="col">
+                                        <div class="form-group">
+                                          <label>Last Name</label>
+                                          <input
+                                            type="text"
+                                            name="lastname"
+                                            required
+                                            [(ngModel)]="loggedInUser.lastname"
+                                            class="form-control"
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="col">
+                                        <div class="form-group">
+                                          <label>Username</label>
+                                          <input
+                                            type="text"
+                                            name="username"
+                                            required
+                                            [(ngModel)]="loggedInUser.username"
+                                            class="form-control"
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="col">
+                                        <div class="form-group">
+                                          <label>Email</label>
+                                          <input
+                                            type="text"
+                                            name="email"
+                                            required
+                                            [(ngModel)]="loggedInUser.email"
+                                            class="form-control"
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="col mb-3">
+                                        <div class="form-group">
+                                          <label>Role</label
+                                          ><small>(read only)</small>
+                                          <select
+                                            name="role"
+                                            required
+                                            [(ngModel)]="loggedInUser.role"
+                                            class="form-control"
+                                          >
+                                            <option value="ROLE_USER">
+                                              USER
+                                            </option>
+                                            <option value="ROLE_HR">HR</option>
+                                            <option value="ROLE_MANAGER">
+                                              MANAGER
+                                            </option>
+                                            <option value="ROLE_ADMIN">
+                                              ADMIN
+                                            </option>
+                                            <option value="ROLE_SUPER_ADMIN">
+                                              SUPER ADMIN
+                                            </option>
+                                          </select>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-12 col-sm-5 offset-sm-1 mb-3">
+                                    <div class="mb-2">
+                                      <b>Account Settings</b>
+                                    </div>
+                                    <div class="row">
+                                      <div class="col">
+                                        <div
+                                          class="custom-controls-stacked px-2"
+                                        >
+                                          <div
+                                            class="custom-control custom-checkbox"
+                                          >
+                                            <input
+                                              name="active"
+                                              type="checkbox"
+                                              [(ngModel)]="loggedInUser.active"
+                                              class="custom-control-input"
+                                            />
+                                            <label class="custom-control-label"
+                                              >Active</label
+                                            >
+                                          </div>
+                                          <div
+                                            class="custom-control custom-checkbox"
+                                          >
+                                            <input
+                                              name="notLocked"
+                                              type="checkbox"
+                                              [(ngModel)]="
+                                                loggedInUser.notLocked
+                                              "
+                                              class="custom-control-input"
+                                            />
+                                            <label class="custom-control-label"
+                                              >Unlocked</label
+                                            >
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col d-flex justify-content-end">
+                                    <button
+                                      class="btn btn-primary"
+                                      type="submit"
+                                    >
+                                      <span>Save Changes</span>
+                                    </button>
+                                  </div>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-3 mb-3">
+                    <div class="card mb-3">
+                      <div class="card-body">
+                        <div class="px-xl-3">
+                          <button
+                            (click)="onLogOut()"
+                            class="btn btn-block btn-secondary"
+                          >
+                            <span>Logout</span>
+                            <i class="fas fa-sign-in-alt ml-1"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card">
+                      <div class="card-body">
+                        <h6 class="card-title font-weight-bold">
+                          Permissions From Role
+                        </h6>
+                        <h6
+                          *ngFor="let authority of loggedInUser.authorities"
+                          class="card-text"
+                        >
+                          {{ authority }}
+                        </h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Start User Profile -->
+
         <!-- Start Reset Password -->
-        <div class="tab-pane fade" id="reset-password">
+        <div class="tab-pane fade reset-password-component" id="reset-password">
           <form
             #resetPasswordForm="ngForm"
             (ngSubmit)="onResetPassword(resetPasswordForm)"
           >
             <fieldset>
-              <legend>User Password Management</legend>
+              <legend class="mb-4 tex-secondary">
+                User Password Management
+              </legend>
               <div class="form-group">
                 <label for="exampleInputEmail1">Email address</label>
                 <input
@@ -168,17 +449,14 @@
                   name="reset-password"
                   required
                   ngModel
-                  class="form-control"
+                  class="form-control mt-2"
                   placeholder="Enter email (example@email.com)"
                 />
-                <small class="form-text text-muted"
-                  >We'll never share your email with anyone else.</small
-                >
               </div>
               <button
                 type="submit"
                 [disabled]="resetPasswordForm.invalid"
-                class="btn btn-primary"
+                class="btn btn-primary mt-4"
               >
                 &nbsp;&nbsp;
                 <span>Reset Password</span>
@@ -618,7 +896,7 @@
                           [(ngModel)]="editedUser.active"
                           class="form-check-input"
                         />
-                        Acitve <small>(read only)</small>
+                        Active <small>(read only)</small>
                       </label>
                     </div>
                     <div class="form-check disabled">
