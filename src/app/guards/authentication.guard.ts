@@ -13,10 +13,10 @@ export class AuthenticationGuard implements CanActivate {
   canActivate( route: ActivatedRouteSnapshot,  state: RouterStateSnapshot): boolean  { return this.isUserLoggedIn(); }
 
   private isUserLoggedIn(): boolean {
-      if(this.authenticationService.isUserLoggedIn()){ return true; }
-      this.router.navigate(['/login']);
-      this.notificationService.notify(NotificationType.ERROR, `You need to login to access this endpoint`.toUpperCase());
-      return false;
+    if(this.authenticationService.isUserLoggedIn()){ return true; }
+    this.router.navigate(['/login']);
+    this.notificationService.notify(NotificationType.ERROR, `You need to login to access this endpoint`.toUpperCase());
+    return false;
   }
 
 }

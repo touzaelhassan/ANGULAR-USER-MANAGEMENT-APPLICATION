@@ -8,46 +8,61 @@
   </head>
   <body>
     <div class="container">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light my-5">
-        <div class="container-fluid">
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link" (click)="changeTitle('Users')">Users</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" (click)="changeTitle('Profile')">Profile</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" (click)="changeTitle('Settings')"
-                  >Settings</a
-                >
-              </li>
-            </ul>
+      <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light p-3">
+          <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="nav nav-tabs">
+                <li class="nav-item">
+                  <a
+                    class="nav-link text-dark"
+                    data-bs-toggle="tab"
+                    href="#users"
+                    >Users</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link text-dark"
+                    data-bs-toggle="tab"
+                    href="#profile"
+                    >Profile</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link text-dark"
+                    data-bs-toggle="tab"
+                    href="#reset-password"
+                    >Settings</a
+                  >
+                </li>
+              </ul>
+            </div>
+            <form class="form-inline my-2 my-lg-0 justify-content-center me-5">
+              <input
+                name="searchTerm"
+                #searchInput="ngModel"
+                class="form-control mr-sm-2"
+                ngModel
+                (ngModelChange)="searchInUsersList(searchInput.value)"
+                type="search"
+                placeholder="Search users..."
+              />
+            </form>
+            <div class="d-flex justify-content-end">
+              <button
+                type="button"
+                class="btn btn-success"
+                data-bs-toggle="modal"
+                data-bs-target="#addUserModal"
+              >
+                Add User
+              </button>
+            </div>
           </div>
-          <form class="form-inline my-2 my-lg-0 justify-content-center me-5">
-            <input
-              name="searchTerm"
-              #searchInput="ngModel"
-              class="form-control mr-sm-2"
-              ngModel
-              (ngModelChange)="searchInUsersList(searchInput.value)"
-              type="search"
-              placeholder="Search users..."
-            />
-          </form>
-          <div class="d-flex justify-content-end">
-            <button
-              type="button"
-              class="btn btn-success"
-              data-bs-toggle="modal"
-              data-bs-target="#addUserModal"
-            >
-              Add User
-            </button>
-          </div>
-        </div>
-      </nav>
+        </nav>
+      </header>
 
       <!-- Start Headen Buttons -->
       <button
@@ -66,74 +81,113 @@
       ></button>
       <!-- End Headen Buttons -->
 
-      <!-- Start Users Table list -->
-      <table class="table table-hover table-bordered">
-        <thead class="table-borderless">
-          <tr class="text-center">
-            <th>User ID</th>
-            <th>User Image</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>User Status</th>
-            <th>Account Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody *ngFor="let user of users">
-          <tr class="text-center">
-            <td>{{ user?.userId }}</td>
-            <td>
-              <img src="{{ user?.profileImageUrl }}" style="width: 60px" />
-            </td>
-            <td (click)="onSelectUser(user)">{{ user?.firstname }}</td>
-            <td (click)="onSelectUser(user)">{{ user?.lastname }}</td>
-            <td (click)="onSelectUser(user)">{{ user?.username }}</td>
-            <td (click)="onSelectUser(user)">{{ user?.email }}</td>
-            <td (click)="onSelectUser(user)">{{ user?.role }}</td>
-            <td>
-              <span [hidden]="!user?.active" class="btn btn-sm btn-success"
-                >Active</span
-              >
-              <span [hidden]="user?.active" class="btn btn-sm btn-warning"
-                >Inactive</span
-              >
-            </td>
-            <td>
-              <span
-                [hidden]="user?.notLocked"
-                style="color: red; font-size: 22px"
-                ><i class="fa-solid fa-lock"></i
-              ></span>
-              <span
-                [hidden]="!user?.notLocked"
-                style="color: green; font-size: 22px"
-              >
-                <i class="fa-solid fa-lock-open"></i>
-              </span>
-            </td>
-            <td class="">
-              <div class="d-flex justify-content-between">
-                <button
-                  class="btn btn-sm btn-success"
-                  (click)="onEditUser(user)"
+      <div class="tab-content" id="myTabContent">
+        <!-- Start Users Table list -->
+        <div class="tab-pane fade show active" id="users">
+          <table class="table table-hover table-bordered">
+            <thead class="table-borderless">
+              <tr class="text-center">
+                <th>User ID</th>
+                <th>User Image</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>User Status</th>
+                <th>Account Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody *ngFor="let user of users">
+              <tr class="text-center">
+                <td>{{ user?.userId }}</td>
+                <td>
+                  <img src="{{ user?.profileImageUrl }}" style="width: 60px" />
+                </td>
+                <td (click)="onSelectUser(user)">{{ user?.firstname }}</td>
+                <td (click)="onSelectUser(user)">{{ user?.lastname }}</td>
+                <td (click)="onSelectUser(user)">{{ user?.username }}</td>
+                <td (click)="onSelectUser(user)">{{ user?.email }}</td>
+                <td (click)="onSelectUser(user)">{{ user?.role }}</td>
+                <td>
+                  <span [hidden]="!user?.active" class="btn btn-sm btn-success"
+                    >Active</span
+                  >
+                  <span [hidden]="user?.active" class="btn btn-sm btn-warning"
+                    >Inactive</span
+                  >
+                </td>
+                <td>
+                  <span
+                    [hidden]="user?.notLocked"
+                    style="color: red; font-size: 22px"
+                    ><i class="fa-solid fa-lock"></i
+                  ></span>
+                  <span
+                    [hidden]="!user?.notLocked"
+                    style="color: green; font-size: 22px"
+                  >
+                    <i class="fa-solid fa-lock-open"></i>
+                  </span>
+                </td>
+                <td class="">
+                  <div class="d-flex justify-content-between">
+                    <button
+                      class="btn btn-sm btn-success"
+                      (click)="onEditUser(user)"
+                    >
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button
+                      class="btn btn-sm btn-danger"
+                      (click)="onDelete(user.id)"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- End Users Table List -->
+
+        <!-- Start Reset Password -->
+        <div class="tab-pane fade" id="reset-password">
+          <form
+            #resetPasswordForm="ngForm"
+            (ngSubmit)="onResetPassword(resetPasswordForm)"
+          >
+            <fieldset>
+              <legend>User Password Management</legend>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input
+                  type="email"
+                  name="reset-password"
+                  required
+                  ngModel
+                  class="form-control"
+                  placeholder="Enter email (example@email.com)"
+                />
+                <small class="form-text text-muted"
+                  >We'll never share your email with anyone else.</small
                 >
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button
-                  class="btn btn-sm btn-danger"
-                  (click)="onDelete(user.id)"
-                >
-                  <i class="fas fa-trash"></i>
-                </button>
               </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- End Users Table List -->
+              <button
+                type="submit"
+                [disabled]="resetPasswordForm.invalid"
+                class="btn btn-primary"
+              >
+                &nbsp;&nbsp;
+                <span>Reset Password</span>
+              </button>
+            </fieldset>
+          </form>
+        </div>
+        <!-- End Reset Password -->
+      </div>
 
       <!-- Start User Information Modal -->
       <div

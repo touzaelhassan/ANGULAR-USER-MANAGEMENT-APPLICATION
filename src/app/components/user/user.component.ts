@@ -37,12 +37,10 @@ export class UserComponent implements OnInit{
       ) {}
 
     ngOnInit(): void { 
-      if(!this.authenticationService.isUserLoggedIn()){
-        this.router.navigateByUrl('/login'); 
-      }else{
+
         this.loggedInUserName = this.authenticationService.getUserFromLocalStorage().firstname;
         this.getUsers(true); 
-      }
+      
     }
 
     public getUsers(showNotification: boolean): void{
@@ -52,7 +50,7 @@ export class UserComponent implements OnInit{
             this.users = response;
             if(showNotification){
               this.userService.addUsersToLocalStorage(this.users);
-              this.sendNotification(NotificationType.SUCCESS, `Welcome ${this.loggedInUserName?.toUpperCase()} !!.`);
+              this.sendNotification(NotificationType.SUCCESS, `Welcome MR ${this.loggedInUserName?.toUpperCase()} !!.`);
             }
           },
           (httpErrorResponse: HttpErrorResponse) => {
@@ -120,6 +118,21 @@ export class UserComponent implements OnInit{
       )
     }
 
+    public onResetPassword(emailForm: NgForm){
+      const email = emailForm.value['reset-password'];
+      this.subscriptions.push(
+        this.userService.resetUserPassword(email).subscribe(
+          (response: CustomHttpRespone) => {
+            this.sendNotification(NotificationType.SUCCESS, response.message);
+          },
+           (httpErrorResponse: HttpErrorResponse) => {
+            this.sendNotification(NotificationType.WARNING, httpErrorResponse.error.message);
+          },
+          () => { emailForm.reset(); }
+        )
+      )
+    }
+
     public searchInUsersList(keyword: string){
 
       const searchResults: User[] = [];
@@ -138,7 +151,6 @@ export class UserComponent implements OnInit{
       if (searchResults.length == 0 || !keyword) { this.users = this.userService.getUsersFromLocalStorage(); }
 
     }
-
 
     public onDelete(id: any){
       this.subscriptions.push(
