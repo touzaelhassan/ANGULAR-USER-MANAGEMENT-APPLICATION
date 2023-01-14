@@ -177,21 +177,21 @@
                                     alt=""
                                   />
                                 </div>
-                                <!-- <div
+                                <div
                                   *ngIf="fileStatus?.status === 'progress'"
                                   class="progress mt-1"
                                 >
                                   <div
                                     class="progress-bar bg-info"
                                     role="progressbar"
-                                    [style.width.%]="fileStatus?.percentage"
+                                    [style.width.%]="fileStatus.percentage"
                                     aria-valuenow="0"
                                     aria-valuemin="0"
                                     aria-valuemax="100"
                                   >
-                                    {{ fileStatus?.percentage }}%
+                                    {{ fileStatus.percentage }}%
                                   </div>
-                                </div> -->
+                                </div>
                               </div>
                             </div>
                             <div
@@ -222,7 +222,11 @@
                                   >
                                 </div>
                                 <div class="mt-2">
-                                  <button class="btn btn-primary" type="button">
+                                  <button
+                                    type="button"
+                                    class="btn btn-primary"
+                                    (click)="updateProfileImage()"
+                                  >
                                     <i class="fa fa-fw fa-camera"></i>
                                     <span>Change Photo</span>
                                   </button>
@@ -241,6 +245,7 @@
                               </div>
                             </div>
                           </div>
+                          <!-- Start User Profile Form -->
                           <div class="tab-content pt-3">
                             <div class="tab-pane active">
                               <form
@@ -393,10 +398,13 @@
                               </form>
                             </div>
                           </div>
+                          <!-- End User Profile Form -->
                         </div>
                       </div>
                     </div>
                   </div>
+
+                  <!-- Start Logout & User Permissions Section -->
                   <div class="col-12 col-md-3 mb-3">
                     <div class="card mb-3">
                       <div class="card-body">
@@ -425,6 +433,7 @@
                       </div>
                     </div>
                   </div>
+                  <!-- Start Logout & User Permissions Section -->
                 </div>
               </div>
             </div>
@@ -936,6 +945,19 @@
         </div>
       </div>
       <!-- End Edit Modal -->
+
+      <!-- Start Update Profile Image Form -->
+      <form enctype="multipart/form-data" style="display: none" method="put">
+        <input
+          type="file"
+          (change)="onProfileImageChange($event); onUpdateProfileImage()"
+          name="profile-image-input"
+          id="profile-image-input"
+          placeholder="file"
+          accept="image/*"
+        />
+      </form>
+      <!-- End Update Profile Image Form -->
     </div>
   </body>
 </html>

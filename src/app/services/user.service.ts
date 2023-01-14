@@ -28,9 +28,9 @@ export class UserService {
     }
 
     public updateProfileImage(formData: FormData): Observable<HttpEvent<User> | HttpErrorResponse>{
-        return this.http.post<User>(`${this.host}/api/user/update/profile-image`, formData, {
-          reportProgress : true,
-          observe: 'events'
+        return this.http.put<User>(`${this.host}/api/user/update/profile-image`, formData, {
+            reportProgress : true,
+            observe: 'events'
         }); 
     }
 
