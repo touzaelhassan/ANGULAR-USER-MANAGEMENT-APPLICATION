@@ -7,14 +7,7 @@
     <title>ANGULAR APPLICATION | HOME</title>
   </head>
   <body>
-    <div class="container m-5">
-      <div class="d-flex align-items-center">
-        <h3>WELCOME TO THE DASHBOARD !!</h3>
-        <span class="ms-3" *ngIf="titleAction$ | async as title">{{
-          title
-        }}</span>
-      </div>
-
+    <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light bg-light my-5">
         <div class="container-fluid">
           <div class="collapse navbar-collapse" id="navbarNav">
@@ -32,20 +25,22 @@
               </li>
             </ul>
           </div>
+          <div class="d-flex justify-content-end">
+            <button
+              type="button"
+              class="btn btn-success"
+              data-bs-toggle="modal"
+              data-bs-target="#addUserModal"
+            >
+              Add User
+            </button>
+          </div>
         </div>
       </nav>
 
-      <button
-        type="button"
-        class="btn btn-info"
-        data-bs-toggle="modal"
-        data-bs-target="#addUserModal"
-      >
-        <i class="fa fa-plus"></i>New User
-      </button>
-
       <!-- Start Headen Buttons -->
       <button
+        [hidden]="true"
         type="button"
         id="openUserInfo"
         data-bs-toggle="modal"
@@ -56,8 +51,8 @@
         [hidden]="true"
         type="button"
         id="openUserEdit"
-        data-toggle="modal"
-        data-target="#editUserModal"
+        data-bs-toggle="modal"
+        data-bs-target="#editUserModal"
       ></button>
       <!-- End Headen Buttons -->
 
@@ -88,9 +83,7 @@
             <td (click)="onSelectUser(user)">{{ user?.email }}</td>
             <td (click)="onSelectUser(user)">{{ user?.role }}</td>
             <td>
-              <span
-                [hidden]="!user?.active || !user?.notLocked"
-                class="btn btn-sm btn-success"
+              <span [hidden]="!user?.active" class="btn btn-sm btn-success"
                 >Active</span
               >
               <span [hidden]="user?.active" class="btn btn-sm btn-warning"
@@ -143,7 +136,7 @@
               <button
                 type="button"
                 class="close"
-                data-dismiss="modal"
+                data-bs-dismiss="modal"
                 aria-label="Close"
               >
                 <span aria-hidden="true">&times;</span>
@@ -182,12 +175,12 @@
                             Status:
                             <span
                               [hidden]="!selectedUser?.active"
-                              class="badge badge-success"
+                              class="btn btn-sm btn-success"
                               >Active</span
                             >
                             <span
                               [hidden]="selectedUser?.active"
-                              class="badge badge-danger"
+                              class="btn btn-sm btn-warning"
                               >Inactive</span
                             >
                           </div>
@@ -229,7 +222,7 @@
                     </li>
                     <li class="list-group-item">
                       <i class="fas fa-shield-alt float-right"></i
-                      >{{ selectedUser?.role }}
+                      >{{ selectedUser?.role.substring(5) }}
                     </li>
                     <li
                       *ngIf="selectedUser?.lastLoginDateDisplay"
@@ -263,7 +256,7 @@
               <button
                 type="button"
                 class="btn btn-secondary"
-                data-dismiss="modal"
+                data-bs-dismiss="modal"
               >
                 Close
               </button>
@@ -289,7 +282,7 @@
               <button
                 type="button"
                 class="close"
-                data-dismiss="modal"
+                data-bs-dismiss="modal"
                 aria-label="Close"
               >
                 <span aria-hidden="true">&times;</span>
@@ -298,9 +291,12 @@
 
             <div class="modal-body">
               <div>
-                <form #newUserForm="ngForm">
+                <form
+                  #newUserForm="ngForm"
+                  (ngSubmit)="onAddNewUser(newUserForm.value)"
+                >
                   <div class="form-group">
-                    <label for="firstName">First Name</label>
+                    <label for="firstname">First Name</label>
                     <input
                       type="text"
                       name="firstname"
@@ -313,7 +309,7 @@
                     <label for="lastname">Last Name</label>
                     <input
                       type="text"
-                      name="lastName"
+                      name="lastname"
                       required
                       ngModel
                       class="form-control"
@@ -354,7 +350,7 @@
                       <option value="ROLE_SUPER_ADMIN">SUPER ADMIN</option>
                     </select>
                   </div>
-                  <div class="form-group">
+                  <!-- <div class="form-group">
                     <label for="authority">Role</label>
                     <input
                       type="text"
@@ -364,7 +360,7 @@
                       readonly
                       class="form-control"
                     />
-                  </div>
+                  </div> -->
                   <div class="input-group mb-2">
                     <div class="input-group-prepend">
                       <span class="input-group-text">Profile Picture </span>
@@ -375,10 +371,11 @@
                         accept="image/*"
                         name="profileImage"
                         class="custom-file-input"
+                        (change)="OnProfileImageChange($event)"
                       />
                       <label class="custom-file-label"
-                        ><span></span>
-                        <span>Choose File</span>
+                        ><span [hidden]="!filename">{{ filename }}</span>
+                        <span [hidden]="filename">Choose File</span>
                       </label>
                     </div>
                   </div>
@@ -391,7 +388,7 @@
                           ngModel
                           class="form-check-input"
                         />
-                        Acitve
+                        Active
                       </label>
                     </div>
                     <div class="form-check disabled">
@@ -419,7 +416,7 @@
               <button
                 type="button"
                 class="btn btn-secondary"
-                data-dismiss="modal"
+                data-bs-dismiss="modal"
                 id="new-user-close"
               >
                 Close
@@ -428,6 +425,7 @@
                 type="button"
                 [disabled]="newUserForm.invalid"
                 class="btn btn-primary"
+                (click)="saveNewUser()"
               >
                 Save changes
               </button>
