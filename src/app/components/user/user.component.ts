@@ -48,6 +48,7 @@ export class UserComponent implements OnInit{
           (response: User[]) => {
             this.users = response;
             if(showNotification){
+              this.userService.addUsersToLocalStorage(this.users);
               this.sendNotification(NotificationType.SUCCESS, `Welcome ${this.loggedInUserName?.toUpperCase()} !!.`);
             }
           },
@@ -91,6 +92,26 @@ export class UserComponent implements OnInit{
           }
         )
       )
+    }
+
+    public searchInUsersList(keyword: string){
+
+      const searchResults: User[] = [];
+
+      for (const user of this.userService.getUsersFromLocalStorage()){
+        if(
+          user.firstname.toLocaleLowerCase().indexOf(keyword.toLocaleLowerCase()) !== -1 || 
+          user.lastname.toLocaleLowerCase().indexOf(keyword.toLocaleLowerCase()) !== -1 ||
+          user.username.toLocaleLowerCase().indexOf(keyword.toLocaleLowerCase()) !== -1 
+        ){
+          searchResults.push(user);
+        }
+      }
+
+      this.users = searchResults
+
+      if (searchResults.length == 0 || !keyword) { this.users = this.userService.getUsersFromLocalStorage(); }
+
     }
 
     public changeTitle(title: string): void{ this.titleSubject.next(title); }

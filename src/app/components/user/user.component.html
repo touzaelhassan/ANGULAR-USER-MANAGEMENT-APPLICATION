@@ -25,6 +25,17 @@
               </li>
             </ul>
           </div>
+          <form class="form-inline my-2 my-lg-0 justify-content-center me-5">
+            <input
+              name="searchTerm"
+              #searchInput="ngModel"
+              class="form-control mr-sm-2"
+              ngModel
+              (ngModelChange)="searchInUsersList(searchInput.value)"
+              type="search"
+              placeholder="Search users..."
+            />
+          </form>
           <div class="d-flex justify-content-end">
             <button
               type="button"
