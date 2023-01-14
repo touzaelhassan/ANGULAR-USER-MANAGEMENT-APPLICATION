@@ -34,8 +34,8 @@ export class UserService {
         }); 
     }
 
-    public deleteUser(userId: number): Observable<any | HttpErrorResponse> {
-        return this.http.delete<any>(`${this.host}/api/user/delete/${userId}`);
+    public deleteUser(id: number): Observable<any | HttpErrorResponse> {
+        return this.http.delete<any>(`${this.host}/api/user/delete/${id}`);
     } 
 
     public addUsersToLocalStorage(users: User[]): void {

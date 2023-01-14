@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { NotificationType } from 'src/app/enums/notification-type.enum';
+import { CustomHttpRespone } from 'src/app/models/custom-http-response';
 import { User } from 'src/app/models/user';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { NotificationService } from 'src/app/services/notification.service';
@@ -119,7 +120,6 @@ export class UserComponent implements OnInit{
       )
     }
 
-
     public searchInUsersList(keyword: string){
 
       const searchResults: User[] = [];
@@ -135,9 +135,23 @@ export class UserComponent implements OnInit{
       }
 
       this.users = searchResults
-
       if (searchResults.length == 0 || !keyword) { this.users = this.userService.getUsersFromLocalStorage(); }
 
+    }
+
+
+    public onDelete(id: any){
+      this.subscriptions.push(
+        this.userService.deleteUser(id).subscribe(
+          (response: CustomHttpRespone)=>{
+            this.sendNotification(NotificationType.SUCCESS, response.message);
+            this.getUsers(false);
+          },
+           (httpErrorResponse: HttpErrorResponse) => {
+            this.sendNotification(NotificationType.ERROR, httpErrorResponse.error.message);
+          }
+        )
+      )
     }
 
     public changeTitle(title: string): void{ this.titleSubject.next(title); }
