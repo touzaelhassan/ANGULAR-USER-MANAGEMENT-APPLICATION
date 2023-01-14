@@ -19,19 +19,15 @@ export class LoginComponent implements OnInit, OnDestroy{
     public showLoading: boolean = false;
     private subscriptions: Subscription[] = [];
 
-    constructor(private router : Router, private authenticationService : AuthenticationService, private notifier: NotificationService){}
+    constructor(private router : Router, private authenticationService : AuthenticationService, private notifier: NotificationService) {}
 
     ngOnInit(): void { 
-      
         if(this.authenticationService.isUserLoggedIn()){
             this.router.navigateByUrl('/user/management'); 
-        }else{
-            this.router.navigateByUrl('/login');
         }
-
     }
 
-    public onLogin(user: User): void{
+    public onLogin(user: User): void {
 
         this.showLoading = true;
 
@@ -41,11 +37,11 @@ export class LoginComponent implements OnInit, OnDestroy{
                   const token : string = response.headers.get(HeaderType.JWT_TOKEN) as string;
                   this.authenticationService.saveTokenInLocalStorage(token);
                   this.authenticationService.saveUserInLocalStorage(response.body as User);
-                  this.router.navigateByUrl('/user/management');
                   this.showLoading = false; 
+                  this.router.navigateByUrl('/user/management');
               },
               (httpErrorResponse: HttpErrorResponse) => {
-                console.log(httpErrorResponse);
+                console.log("Error : " + httpErrorResponse);
                 this.sendErrorNotification(NotificationType.ERROR, httpErrorResponse.error.message);
                 this.showLoading = false;
               }

@@ -12,15 +12,15 @@ export class UserService {
     constructor(private http: HttpClient) { }
 
     public addUser(formData: FormData): Observable<User | HttpErrorResponse> { 
-        return this.http.post<User>(`${this.host}/user/add`, formData); 
+        return this.http.post<User>(`${this.host}/api/user/add`, formData); 
     }
 
     public updateUser(formData: FormData): Observable<User | HttpErrorResponse> { 
-        return this.http.post<User>(`${this.host}/user/update`, formData); 
+        return this.http.post<User>(`${this.host}/api/user/update`, formData); 
     }
 
     public resetUserPassword(email: string): Observable<any | HttpErrorResponse>{
-        return this.http.get(`${this.host}/user/reset-password/${email}`);
+        return this.http.get(`${this.host}/api/user/reset-password/${email}`);
     }
 
     public getUsers(): Observable<User[]>{ 
@@ -28,14 +28,14 @@ export class UserService {
     }
 
     public updateProfileImage(formData: FormData): Observable<HttpEvent<User> | HttpErrorResponse>{
-        return this.http.post<User>(`${this.host}/user/update/profile-image`, formData, {
+        return this.http.post<User>(`${this.host}/api/user/update/profile-image`, formData, {
           reportProgress : true,
           observe: 'events'
         }); 
     }
 
     public deleteUser(userId: number): Observable<any | HttpErrorResponse> {
-        return this.http.delete<any>(`${this.host}/user/delete/${userId}`);
+        return this.http.delete<any>(`${this.host}/api/user/delete/${userId}`);
     } 
 
     public addUsersToLocalStorage(users: User[]): void {

@@ -15,31 +15,25 @@ import { NotificationService } from 'src/app/services/notification.service';
 
 export class RegisterComponent implements OnInit, OnDestroy{
 
-    public showLoading: boolean = false;
-    private subscriptions: Subscription[] = [];
+  private subscriptions: Subscription[] = [];
 
-    constructor(private router : Router, private authenticationService : AuthenticationService, private notifier: NotificationService){}
+  constructor(private router : Router, private authenticationService : AuthenticationService, private notifier: NotificationService){}
 
-    public ngOnInit(): void { if(this.authenticationService.isUserLoggedIn()){ this.router.navigateByUrl('/user/management'); } }
+  public ngOnInit(): void { if(this.authenticationService.isUserLoggedIn()){ this.router.navigateByUrl('/user/management'); } }
 
-    public onRegister(user: User): void{
-
-        this.showLoading = true;
-
-        this.subscriptions.push(
-            this.authenticationService.register(user).subscribe(
-              (response: User) => {
-                  this.showLoading = false; 
-                  this.sendNotification(NotificationType.SUCCESS, `A new account was created for ${response.firstname}. Please check your email for password to login.`)
-              },
-              (httpErrorResponse: HttpErrorResponse) => {
-                console.log(httpErrorResponse);
-                this.sendNotification(NotificationType.ERROR, httpErrorResponse.error.message);
-                this.showLoading = false;
-              }
-            )
-        );
-    }
+  public onRegister(user: User): void{
+    this.subscriptions.push(
+      this.authenticationService.register(user).subscribe(
+        (response: User) => {
+          this.sendNotification(NotificationType.SUCCESS, `A new account was created for ${response.firstname}, Go to login page.`)
+        },
+        (httpErrorResponse: HttpErrorResponse) => {
+          console.log(httpErrorResponse);
+          this.sendNotification(NotificationType.ERROR, httpErrorResponse.error.message);
+        }
+      )
+    );
+  }    
 
   private sendNotification(notificationType: NotificationType, message: string) : void {
     if(message){

@@ -4,18 +4,18 @@ import { NotifierOptions, NotifierModule } from 'angular-notifier';
 const customNotifierOptions: NotifierOptions = {
     position: {
           horizontal: {
-              position: 'left',
+              position: 'right',
               distance: 150
           },
           vertical: {
               position: 'top',
-              distance: 12,
+              distance: 40,
               gap: 10
           }
       },
     theme: 'material',
     behaviour: {
-      autoHide: 5000,
+      autoHide: 7000,
       onClick: 'hide',
       onMouseover: 'pauseAutoHide',
       showDismissButton: true,
@@ -25,17 +25,17 @@ const customNotifierOptions: NotifierOptions = {
       enabled: true,
       show: {
         preset: 'slide',
-        speed: 300,
+        speed: 500,
         easing: 'ease'
       },
       hide: {
         preset: 'fade',
-        speed: 300,
+        speed: 500,
         easing: 'ease',
         offset: 50
       },
       shift: {
-        speed: 300,
+        speed: 500,
         easing: 'ease'
       },
       overlap: 150

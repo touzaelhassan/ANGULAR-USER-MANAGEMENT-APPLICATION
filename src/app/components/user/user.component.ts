@@ -1,8 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { NotificationType } from 'src/app/enums/notification-type.enum';
 import { User } from 'src/app/models/user';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -14,38 +16,50 @@ import { UserService } from 'src/app/services/user.service';
 
 export class UserComponent implements OnInit{
 
-    private titleSubject = new BehaviorSubject<string>('Managers'); 
+    private titleSubject = new BehaviorSubject<string>('Users'); 
     public titleAction$ = this.titleSubject.asObservable();
     public users: User[] = [];
-    public refreshing: boolean = false;
     private subscriptions: Subscription[] = [];
+    private loggedInUserName?:string;
+    public selectedUser?: User;
 
+    constructor(
+      private authenticationService: AuthenticationService, 
+      private userService: UserService, 
+      private router : Router, 
+      private notificationService: NotificationService
+      ) {}
 
-    constructor(private userService: UserService, private notificationService: NotificationService) {}
+    ngOnInit(): void { 
+      if(!this.authenticationService.isUserLoggedIn()){
+        this.router.navigateByUrl('/login'); 
+      }else{
+        this.loggedInUserName = this.authenticationService.getUserFromLocalStorage().firstname;
+        this.getUsers(); 
+      }
+    }
 
-    ngOnInit(): void { this.getUsers(true); }
-
-    public changeTitle(title: string): void{ this.titleSubject.next(title); }
-
-    public getUsers(showNotification: boolean): void{
-      this.refreshing = true;
+    public getUsers(): void{
       this.subscriptions.push(
         this.userService.getUsers().subscribe(
           (response: User[]) => {
-            this.userService.addUsersToLocalStorage(response);
             this.users = response;
-            this.refreshing = false;
-            if(showNotification){
-                this.sendNotification(NotificationType.SUCCESS, `${response.length} user(s) loaded successfully`)
-            }
+            console.log(response)
+            this.sendNotification(NotificationType.SUCCESS, `Welcome ${this.loggedInUserName?.toUpperCase()} !!! .`)
           },
           (httpErrorResponse: HttpErrorResponse) => {
-              this.sendNotification(NotificationType.ERROR, httpErrorResponse.error.message);
-              this.refreshing = false;
+            this.sendNotification(NotificationType.ERROR, httpErrorResponse.error.message);
           }
         )
       )
     }
+
+    public onSelectUser(selectedUser: User){
+      this.selectedUser  = selectedUser;
+      document.getElementById("openUserInfo")?.click();
+    }
+
+    public changeTitle(title: string): void{ this.titleSubject.next(title); }
 
     private sendNotification(notificationType: NotificationType, message: string) : void {
     if(message){
@@ -53,6 +67,6 @@ export class UserComponent implements OnInit{
     }else{
       this.notificationService.notify(notificationType, 'Opps !! error occured, Please try again.')
     }
-  }
-  
+    }
+
 }
