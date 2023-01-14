@@ -8,9 +8,10 @@
   </head>
   <body>
     <div class="container">
+      <!-- Start Header Section -->
       <header class="header">
         <nav class="navbar navbar-expand-lg navbar-light bg-light p-3">
-          <div class="container-fluid">
+          <div class="container-fluid p-0">
             <div class="collapse navbar-collapse" id="navbarNav">
               <ul class="nav nav-tabs">
                 <li class="nav-item">
@@ -29,7 +30,7 @@
                     >Profile</a
                   >
                 </li>
-                <li class="nav-item">
+                <li [hidden]="!isAdmin" class="nav-item">
                   <a
                     class="nav-link text-dark"
                     data-bs-toggle="tab"
@@ -39,7 +40,7 @@
                 </li>
               </ul>
             </div>
-            <form class="form-inline my-2 my-lg-0 justify-content-center me-5">
+            <form class="form-inline my-2 my-lg-0 justify-content-center">
               <input
                 name="searchTerm"
                 #searchInput="ngModel"
@@ -52,8 +53,9 @@
             </form>
             <div class="d-flex justify-content-end">
               <button
+                [hidden]="!isAdminOrManager"
                 type="button"
-                class="btn btn-success"
+                class="btn btn-success ms-5"
                 data-bs-toggle="modal"
                 data-bs-target="#addUserModal"
               >
@@ -63,6 +65,7 @@
           </div>
         </nav>
       </header>
+      <!-- End Header Section -->
 
       <!-- Start Headen Buttons -->
       <button
@@ -133,13 +136,16 @@
                 </td>
                 <td class="">
                   <div class="d-flex justify-content-between">
+                    <span *ngIf="!isAdminOrManager">No Action</span>
                     <button
+                      [hidden]="!isAdminOrManager"
                       class="btn btn-sm btn-success"
                       (click)="onEditUser(user)"
                     >
                       <i class="fas fa-edit"></i>
                     </button>
                     <button
+                      [hidden]="!isAdmin"
                       class="btn btn-sm btn-danger"
                       (click)="onDelete(user.id)"
                     >
@@ -316,8 +322,11 @@
                                       <div class="col mb-3">
                                         <div class="form-group">
                                           <label>Role</label
-                                          ><small>(read only)</small>
+                                          ><small *ngIf="!isAdmin"
+                                            >(read only)</small
+                                          >
                                           <select
+                                            [disabled]="!isAdmin"
                                             name="role"
                                             required
                                             [(ngModel)]="loggedInUser.role"
@@ -356,19 +365,25 @@
                                             class="custom-control custom-checkbox"
                                           >
                                             <input
+                                              [disabled]="!isAdmin"
                                               name="active"
                                               type="checkbox"
                                               [(ngModel)]="loggedInUser.active"
                                               class="custom-control-input"
                                             />
+
                                             <label class="custom-control-label"
-                                              >Active</label
+                                              >Active
+                                            </label>
+                                            <small *ngIf="!isAdmin">
+                                              (read only)</small
                                             >
                                           </div>
                                           <div
                                             class="custom-control custom-checkbox"
                                           >
                                             <input
+                                              [disabled]="!isAdmin"
                                               name="notLocked"
                                               type="checkbox"
                                               [(ngModel)]="
@@ -376,8 +391,12 @@
                                               "
                                               class="custom-control-input"
                                             />
+
                                             <label class="custom-control-label"
-                                              >Unlocked</label
+                                              >Unlocked
+                                            </label>
+                                            <small *ngIf="!isAdmin">
+                                              (read only)</small
                                             >
                                           </div>
                                         </div>
@@ -442,7 +461,11 @@
         <!-- Start User Profile -->
 
         <!-- Start Reset Password -->
-        <div class="tab-pane fade reset-password-component" id="reset-password">
+        <div
+          [hidden]="!isAdmin"
+          class="tab-pane fade reset-password-component"
+          id="reset-password"
+        >
           <form
             #resetPasswordForm="ngForm"
             (ngSubmit)="onResetPassword(resetPasswordForm)"
@@ -627,6 +650,7 @@
 
       <!-- START ADD USER MODEL -->
       <div
+        [hidden]="!isAdminOrManager"
         class="modal draggable fade bd-example-modal-lg"
         id="addUserModal"
         tabindex="-1"
@@ -694,7 +718,7 @@
                       class="form-control"
                     />
                   </div>
-                  <div class="form-group">
+                  <div *ngIf="isAdmin" class="form-group">
                     <label for="authority">Role</label>
                     <select
                       name="role"
@@ -709,7 +733,7 @@
                       <option value="ROLE_SUPER_ADMIN">SUPER ADMIN</option>
                     </select>
                   </div>
-                  <!-- <div class="form-group">
+                  <div [hidden]="isAdmin" class="form-group">
                     <label for="authority">Role</label>
                     <input
                       type="text"
@@ -719,7 +743,7 @@
                       readonly
                       class="form-control"
                     />
-                  </div> -->
+                  </div>
                   <div class="input-group mb-2">
                     <div class="input-group-prepend">
                       <span class="input-group-text">Profile Picture </span>
@@ -796,6 +820,7 @@
 
       <!-- Start Edit Modal -->
       <div
+        [hidden]="!isAdminOrManager"
         class="modal draggable fade bd-example-modal-lg"
         id="editUserModal"
         tabindex="-1"
@@ -863,10 +888,11 @@
                   </div>
                   <div class="form-group">
                     <label for="authority"
-                      >Role <small>(read only)</small></label
+                      >Role <small *ngIf="!isAdmin">(read only)</small></label
                     >
                     <select
                       name="role"
+                      [disabled]="!isAdmin"
                       required
                       [(ngModel)]="editedUser.role"
                       class="form-control"
@@ -900,23 +926,25 @@
                     <div class="form-check">
                       <label class="form-check-label">
                         <input
+                          [disabled]="!isAdmin"
                           name="active"
                           type="checkbox"
                           [(ngModel)]="editedUser.active"
                           class="form-check-input"
                         />
-                        Active <small>(read only)</small>
+                        Active <small *ngIf="!isAdmin">(read only)</small>
                       </label>
                     </div>
                     <div class="form-check disabled">
                       <label class="form-check-label">
                         <input
+                          [disabled]="!isAdmin"
                           name="locked"
                           type="checkbox"
                           [(ngModel)]="editedUser.notLocked"
                           class="form-check-input"
                         />
-                        Unlocked <small>(read only)</small>
+                        Unlocked <small *ngIf="!isAdmin">(read only)</small>
                       </label>
                     </div>
                   </fieldset>

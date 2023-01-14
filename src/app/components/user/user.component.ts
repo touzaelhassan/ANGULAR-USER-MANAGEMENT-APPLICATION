@@ -1,9 +1,10 @@
 import { HttpErrorResponse, HttpEvent, HttpEventType } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { NotificationType } from 'src/app/enums/notification-type.enum';
+import { Role } from 'src/app/enums/role.enum';
 import { CustomHttpRespone } from 'src/app/models/custom-http-response';
 import { FileUploadStatus } from 'src/app/models/file-upload-status';
 import { User } from 'src/app/models/user';
@@ -17,7 +18,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./user.component.css']
 })
 
-export class UserComponent implements OnInit{
+export class UserComponent implements OnInit, OnDestroy{
 
     private titleSubject = new BehaviorSubject<string>('Users'); 
     public titleAction$ = this.titleSubject.asObservable();
@@ -233,6 +234,11 @@ export class UserComponent implements OnInit{
       this.sendNotification(NotificationType.SUCCESS, "You've been successfully logged out !!.");
     }
 
+    public getUserRole(): string { return this.authenticationService.getUserFromLocalStorage().role; }
+    public get isAdmin(): boolean{ return this.getUserRole() === Role.ADMIN || this.getUserRole() === Role.SUPER_ADMIN; }
+    public get isManager(): boolean{ return this.isAdmin || this.getUserRole() === Role.MANAGER; }
+    public get isAdminOrManager(): boolean{ return this.isAdmin || this.isManager }
+
     public changeTitle(title: string): void{ this.titleSubject.next(title); }
 
     private sendNotification(notificationType: NotificationType, message: string) : void {
@@ -242,5 +248,7 @@ export class UserComponent implements OnInit{
       this.notificationService.notify(notificationType, 'Opps !! error occured, Please try again.')
     }
     }
+
+  public ngOnDestroy(): void { this.subscriptions.forEach(sub => sub.unsubscribe()); }
 
 }
