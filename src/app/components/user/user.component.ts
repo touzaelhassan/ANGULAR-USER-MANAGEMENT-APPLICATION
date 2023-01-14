@@ -76,17 +76,17 @@ export class UserComponent implements OnInit{
 
     public saveNewUser(): void{ document.getElementById("new-user-save")?.click(); }
 
-    public onAddNewUser(userForm: NgForm): void{
+    public onAddNewUser(userForm: any): void{
       const formData = this.userService.createUserFormDate(null, userForm, this.profileImage);
       this.subscriptions.push(
         this.userService.addUser(formData).subscribe(
           (response: any) =>{
             document.getElementById("new-user-close")?.click();
-            this.sendNotification(NotificationType.SUCCESS, `The new user was added successfully !!.`);
             this.getUsers(false);
-            this.profileImage = null;
             this.filename = null;
-            userForm.reset();
+            this.profileImage = null;
+            userForm.reset()
+            this.sendNotification(NotificationType.SUCCESS, `The new user was added successfully !!.`);
           },  
           (httpErrorResponse: HttpErrorResponse) => {
             this.sendNotification(NotificationType.ERROR, httpErrorResponse.error.message);
