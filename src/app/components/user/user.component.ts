@@ -22,9 +22,11 @@ export class UserComponent implements OnInit{
     public users: User[] = [];
     private subscriptions: Subscription[] = [];
     private loggedInUserName?:string;
-    public selectedUser?: any;
     public filename: any;
     public profileImage: any;
+    public selectedUser?: any;
+    public editedUser = new User();
+    private currentUsername?: string;
 
     constructor(
       private authenticationService: AuthenticationService, 
@@ -64,19 +66,16 @@ export class UserComponent implements OnInit{
       document.getElementById("openUserInfo")?.click();
     }
 
-    public OnProfileImageChange(event:any): void{
+    public onProfileImageChange(event:any): void{
       const files = event.target.files;
       this.profileImage = files[0];
       this.filename = files[0].name;
     }
 
-    public saveNewUser(): void{
-      document.getElementById("new-user-save")?.click();
-    }
+    public saveNewUser(): void{ document.getElementById("new-user-save")?.click(); }
 
     public onAddNewUser(userForm: NgForm): void{
       const formData = this.userService.createUserFormDate(null, userForm, this.profileImage);
-      this.userService.addUser(formData);
       this.subscriptions.push(
         this.userService.addUser(formData).subscribe(
           (response: any) =>{
@@ -89,10 +88,37 @@ export class UserComponent implements OnInit{
           },  
           (httpErrorResponse: HttpErrorResponse) => {
             this.sendNotification(NotificationType.ERROR, httpErrorResponse.error.message);
+            this.profileImage = null;
           }
         )
       )
     }
+
+    public onEditUser(user: User): void{
+      this.editedUser = user;
+      this.currentUsername = user.username;
+      document.getElementById("openUserEdit")?.click();
+    }
+
+    public onUpdateUser(): void{
+      const formData = this.userService.createUserFormDate(this.currentUsername, this.editedUser , this.profileImage);
+      this.subscriptions.push(
+        this.userService.updateUser(formData).subscribe(
+          (response: any) =>{
+            document.getElementById("closeEditUserModalButton")?.click();
+            this.sendNotification(NotificationType.SUCCESS, `The user information were updated successfully !!.`);
+            this.getUsers(false);
+            this.profileImage = null;
+            this.filename = null;
+          },  
+          (httpErrorResponse: HttpErrorResponse) => {
+            this.sendNotification(NotificationType.ERROR, httpErrorResponse.error.message);
+            this.profileImage = null;
+          }
+        )
+      )
+    }
+
 
     public searchInUsersList(keyword: string){
 
