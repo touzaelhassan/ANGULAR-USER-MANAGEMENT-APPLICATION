@@ -1,11 +1,8 @@
 pipeline {
-
     agent any
-
     triggers {
        pollSCM '* * * * *'
     }
-
     stages {
         stage('Deploy') {
             steps {
@@ -14,5 +11,4 @@ pipeline {
             }
         }
     }
-
 }
